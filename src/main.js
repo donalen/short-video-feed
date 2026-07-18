@@ -4,30 +4,27 @@ import { createVideoCard } from "./components/VideoCard.js";
 import { Player } from "./services/Player.js";
 import { VideoLoader } from "./services/VideoLoader.js";
 
-const app = document.querySelector("#app");
+const feed = document.querySelector(".video-feed");
+
+if (!feed) {
+  throw new Error('Video feed container ".video-feed" was not found');
+}
+
 const player = new Player();
 const videoLoader = new VideoLoader();
 
-function renderFeed(items) {
-  const feed = document.createElement("div");
-  const fragment = document.createDocumentFragment();
+videos.forEach((videoData) => {
+  const card = createVideoCard(videoData);
+  const video = card.querySelector(".video-card__video");
 
-  feed.className = "video-feed";
+  if (!video) {
+    return;
+  }
 
-  items.forEach((videoData) => {
-    const card = createVideoCard(videoData);
-    const videoElement = card.querySelector("video");
+  feed.append(card);
 
-    if (videoElement) {
-      videoLoader.observe(videoElement);
-      player.observe(videoElement);
-    }
+  player.observe(video);
+  videoLoader.observe(video);
+});
 
-    fragment.append(card);
-  });
-
-  feed.append(fragment);
-  app.append(feed);
-}
-
-renderFeed(videos);
+feed.focus({ preventScroll: true });

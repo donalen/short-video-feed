@@ -3,7 +3,7 @@ export class VideoLoader {
     this.observer = new IntersectionObserver(
       this.handleIntersection.bind(this),
       {
-        rootMargin: "100% 0px",
+        rootMargin: "200% 0px",
       },
     );
   }
@@ -12,13 +12,23 @@ export class VideoLoader {
     this.observer.observe(video);
   }
 
+  unobserve(video) {
+    this.observer.unobserve(video);
+  }
+
+  destroy() {
+    this.observer.disconnect();
+  }
+
   handleIntersection(entries) {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) {
-        return;
-      }
+      const video = entry.target;
 
-      this.load(entry.target);
+      if (entry.isIntersecting) {
+        this.load(video);
+      } else {
+        this.unload(video);
+      }
     });
   }
 
@@ -34,6 +44,16 @@ export class VideoLoader {
     }
 
     video.src = source;
+    video.load();
+  }
+
+  unload(video) {
+    if (!video.getAttribute("src")) {
+      return;
+    }
+
+    video.pause();
+    video.removeAttribute("src");
     video.load();
   }
 }

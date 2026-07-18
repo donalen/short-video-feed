@@ -11,6 +11,7 @@ export function createVideoCard({ id, src }) {
       muted
       playsinline
       preload="metadata"
+      aria-label="Video ${id}"
     ></video>
 
     <div class="video-card__playback-indicator" aria-hidden="true">
