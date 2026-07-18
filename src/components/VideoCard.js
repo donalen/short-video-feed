@@ -8,7 +8,6 @@ export function createVideoCard({ id, src }) {
     <video
       class="video-card__video"
       src="${src}"
-      controls
       muted
       playsinline
       preload="metadata"

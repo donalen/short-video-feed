@@ -12,6 +12,7 @@ export class Player {
 
   observe(video) {
     this.observer.observe(video);
+    video.addEventListener("click", this.handleClick);
   }
 
   handleIntersection(entries) {
@@ -28,8 +29,17 @@ export class Player {
       }
 
       this.currentVideo = video;
-
       video.play().catch(() => {});
     });
   }
+
+  handleClick = (event) => {
+    const video = event.currentTarget;
+
+    if (video.paused) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  };
 }
