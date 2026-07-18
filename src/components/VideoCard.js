@@ -7,7 +7,7 @@ export function createVideoCard({ id, src }) {
   card.innerHTML = `
     <video
       class="video-card__video"
-      src="${src}"
+      data-src="${src}"
       muted
       playsinline
       preload="metadata"
