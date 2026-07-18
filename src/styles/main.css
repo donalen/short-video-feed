@@ -43,18 +43,6 @@ body {
   scroll-snap-stop: always;
 }
 
-.video-card:nth-child(3n + 1) {
-  background: #6f263d;
-}
-
-.video-card:nth-child(3n + 2) {
-  background: #234f70;
-}
-
-.video-card:nth-child(3n + 3) {
-  background: #286044;
-}
-
 .video-card__content {
   padding: 24px 16px;
 }

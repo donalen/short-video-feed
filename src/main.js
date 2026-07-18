@@ -1,8 +1,10 @@
 import "./styles/main.css";
 import { videos } from "./data/videos.js";
 import { createVideoCard } from "./components/VideoCard.js";
+import { Player } from "./services/Player.js";
 
 const app = document.querySelector("#app");
+const player = new Player();
 
 function renderFeed(items) {
   const feed = document.createElement("div");
@@ -10,8 +12,15 @@ function renderFeed(items) {
 
   feed.className = "video-feed";
 
-  items.forEach((video) => {
-    fragment.append(createVideoCard(video));
+  items.forEach((videoData) => {
+    const card = createVideoCard(videoData);
+    const videoElement = card.querySelector("video");
+
+    if (videoElement) {
+      player.observe(videoElement);
+    }
+
+    fragment.append(card);
   });
 
   feed.append(fragment);
