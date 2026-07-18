@@ -38,8 +38,29 @@ export class Player {
 
     if (video.paused) {
       video.play().catch(() => {});
+      this.showIndicator(video, "❚❚", true);
     } else {
       video.pause();
+      this.showIndicator(video, "▶");
     }
   };
+
+  showIndicator(video, symbol, autoHide = false) {
+    const indicator = video
+      .closest(".video-card")
+      ?.querySelector(".video-card__playback-indicator");
+
+    if (!indicator) {
+      return;
+    }
+
+    indicator.textContent = symbol;
+    indicator.classList.add("is-visible");
+
+    if (autoHide) {
+      window.setTimeout(() => {
+        indicator.classList.remove("is-visible");
+      }, 500);
+    }
+  }
 }

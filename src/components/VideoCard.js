@@ -12,6 +12,10 @@ export function createVideoCard({ id, src }) {
       playsinline
       preload="metadata"
     ></video>
+
+    <div class="video-card__playback-indicator" aria-hidden="true">
+      ▶
+    </div>
   `;
 
   return card;
