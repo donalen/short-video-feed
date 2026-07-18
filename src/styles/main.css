@@ -67,6 +67,24 @@ body {
   margin: 0;
 }
 
+.video-card {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.video-card__video {
+  width: 100%;
+  height: 100dvh;
+  display: block;
+  object-fit: cover;
+  background: #000;
+}
+
 @media (min-width: 768px) {
   body {
     display: grid;
