@@ -1,6 +1,7 @@
 export class Player {
   constructor() {
     this.currentVideo = null;
+    this.wasPlayingBeforeHidden = false;
     this.indicatorTimers = new WeakMap();
     this.videos = new Set();
 
@@ -12,6 +13,7 @@ export class Player {
     );
 
     document.addEventListener("keydown", this.handleKeydown);
+    document.addEventListener("visibilitychange", this.handleVisibilityChange);
   }
 
   observe(video) {
@@ -39,6 +41,10 @@ export class Player {
     });
 
     document.removeEventListener("keydown", this.handleKeydown);
+    document.removeEventListener(
+      "visibilitychange",
+      this.handleVisibilityChange,
+    );
 
     this.videos.clear();
     this.observer.disconnect();
@@ -107,6 +113,29 @@ export class Player {
 
     event.preventDefault();
     this.togglePlayback(this.currentVideo);
+  };
+
+  handleVisibilityChange = () => {
+    const video = this.currentVideo;
+
+    if (!video) {
+      return;
+    }
+
+    if (document.hidden) {
+      this.wasPlayingBeforeHidden = !video.paused;
+
+      if (this.wasPlayingBeforeHidden) {
+        this.pause(video, false);
+      }
+
+      return;
+    }
+
+    if (this.wasPlayingBeforeHidden) {
+      this.wasPlayingBeforeHidden = false;
+      this.play(video).catch(() => {});
+    }
   };
 
   togglePlayback(video) {
