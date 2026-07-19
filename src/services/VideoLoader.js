@@ -5,7 +5,8 @@ export class VideoLoader {
     this.observer = new IntersectionObserver(
       this.handleIntersection.bind(this),
       {
-        rootMargin: "200% 0px",
+        // Each card is 100dvh, so a 100% margin covers exactly prev/next.
+        rootMargin: "100% 0px",
       },
     );
   }
