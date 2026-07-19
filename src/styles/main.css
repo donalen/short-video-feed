@@ -1,7 +1,6 @@
 :root {
   --color-white: #fff;
   --color-dark: #111;
-  --color-black: #000;
 
   --overlay-bg: rgb(0 0 0 / 45%);
   --overlay-bg-strong: rgb(0 0 0 / 60%);
@@ -68,7 +67,7 @@ body {
   height: 100dvh;
 
   object-fit: cover;
-  background: var(--color-black);
+  background: var(--color-white);
 }
 
 .video-card__spinner {
@@ -241,6 +240,5 @@ body {
 
   .video-card__video {
     object-fit: contain;
-    background: var(--color-white);
   }
 }
