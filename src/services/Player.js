@@ -170,7 +170,7 @@ export class Player {
     if (video.paused) {
       this.play(video)
         .then(() => {
-          this.showIndicator(video, "❚❚", true);
+          this.showIndicator(video, "pause", true);
         })
         .catch(() => {});
     } else {
@@ -189,7 +189,7 @@ export class Player {
     video.pause();
 
     if (showIndicator) {
-      this.showIndicator(video, "▶");
+      this.showIndicator(video, "play");
     }
   }
 
@@ -208,7 +208,7 @@ export class Player {
     video.load();
   }
 
-  showIndicator(video, symbol, autoHide = false) {
+  showIndicator(video, icon, autoHide = false) {
     const indicator = this.getIndicator(video);
 
     if (!indicator) {
@@ -217,7 +217,7 @@ export class Player {
 
     this.clearIndicatorTimer(video);
 
-    indicator.textContent = symbol;
+    indicator.dataset.icon = icon;
     indicator.classList.add("is-visible");
 
     if (autoHide) {
@@ -265,7 +265,6 @@ export class Player {
       return;
     }
 
-    button.textContent = this.muted ? "🔇" : "🔊";
     button.setAttribute("aria-pressed", String(this.muted));
     button.setAttribute("aria-label", this.muted ? "Unmute" : "Mute");
   }

@@ -1,3 +1,5 @@
+import { iconPlay, iconPause, iconMuted, iconUnmuted } from "./icons.js";
+
 export function createVideoCard({ id, src }) {
   const card = document.createElement("section");
 
@@ -21,8 +23,9 @@ export function createVideoCard({ id, src }) {
       <button type="button" class="video-card__retry">Повторить</button>
     </div>
 
-    <div class="video-card__playback-indicator" aria-hidden="true">
-      ▶
+    <div class="video-card__playback-indicator" aria-hidden="true" data-icon="play">
+      ${iconPlay}
+      ${iconPause}
     </div>
 
     <button
@@ -30,7 +33,10 @@ export function createVideoCard({ id, src }) {
       class="video-card__mute"
       aria-pressed="true"
       aria-label="Unmute"
-    >🔇</button>
+    >
+      ${iconMuted}
+      ${iconUnmuted}
+    </button>
 
     <div class="video-card__progress" aria-hidden="true">
       <div class="video-card__progress-bar"></div>
