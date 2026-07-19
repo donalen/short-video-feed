@@ -62,24 +62,6 @@ body {
   background: #000;
 }
 
-.video-card__content {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-
-  padding: 24px 16px;
-  pointer-events: none;
-}
-
-.video-card__title {
-  margin: 0 0 8px;
-}
-
-.video-card__description {
-  margin: 0;
-}
-
 .video-card__playback-indicator {
   position: absolute;
   top: 50%;
@@ -109,9 +91,18 @@ body {
   body {
     display: grid;
     place-items: center;
+    background: #fff;
+    color: #111;
   }
 
   .video-feed {
-    width: 100%;
+    width: min(100vw, calc(100dvh * 9 / 16));
+    height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  .video-card__video {
+    object-fit: contain;
+    background: #fff;
   }
 }
