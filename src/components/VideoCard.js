@@ -24,6 +24,13 @@ export function createVideoCard({ id, src }) {
     <div class="video-card__playback-indicator" aria-hidden="true">
       ▶
     </div>
+
+    <button
+      type="button"
+      class="video-card__mute"
+      aria-pressed="true"
+      aria-label="Unmute"
+    >🔇</button>
   `;
 
   return card;

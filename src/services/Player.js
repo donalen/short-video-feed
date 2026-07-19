@@ -2,6 +2,7 @@ export class Player {
   constructor() {
     this.currentVideo = null;
     this.wasPlayingBeforeHidden = false;
+    this.muted = true;
     this.indicatorTimers = new WeakMap();
     this.videos = new Set();
 
@@ -20,12 +21,17 @@ export class Player {
     this.videos.add(video);
     this.observer.observe(video);
     video.addEventListener("click", this.handleClick);
+    this.getMuteButton(video)?.addEventListener("click", this.handleMuteClick);
   }
 
   unobserve(video) {
     this.videos.delete(video);
     this.observer.unobserve(video);
     video.removeEventListener("click", this.handleClick);
+    this.getMuteButton(video)?.removeEventListener(
+      "click",
+      this.handleMuteClick,
+    );
 
     this.clearIndicatorTimer(video);
 
@@ -37,6 +43,10 @@ export class Player {
   destroy() {
     this.videos.forEach((video) => {
       video.removeEventListener("click", this.handleClick);
+      this.getMuteButton(video)?.removeEventListener(
+        "click",
+        this.handleMuteClick,
+      );
       this.clearIndicatorTimer(video);
     });
 
@@ -138,6 +148,24 @@ export class Player {
     }
   };
 
+  handleMuteClick = (event) => {
+    const video = event.currentTarget
+      .closest(".video-card")
+      ?.querySelector(".video-card__video");
+
+    if (!video) {
+      return;
+    }
+
+    this.toggleMute(video);
+  };
+
+  toggleMute(video) {
+    this.muted = !this.muted;
+    video.muted = this.muted;
+    this.updateMuteButton(video);
+  }
+
   togglePlayback(video) {
     if (video.paused) {
       this.play(video)
@@ -152,6 +180,8 @@ export class Player {
 
   play(video) {
     this.ensureLoaded(video);
+    video.muted = this.muted;
+    this.updateMuteButton(video);
     return video.play();
   }
 
@@ -226,5 +256,21 @@ export class Player {
     return video
       .closest(".video-card")
       ?.querySelector(".video-card__playback-indicator");
+  }
+
+  updateMuteButton(video) {
+    const button = this.getMuteButton(video);
+
+    if (!button) {
+      return;
+    }
+
+    button.textContent = this.muted ? "🔇" : "🔊";
+    button.setAttribute("aria-pressed", String(this.muted));
+    button.setAttribute("aria-label", this.muted ? "Unmute" : "Mute");
+  }
+
+  getMuteButton(video) {
+    return video.closest(".video-card")?.querySelector(".video-card__mute");
   }
 }
