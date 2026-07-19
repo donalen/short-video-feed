@@ -1,9 +1,14 @@
+import { loadVideoSource } from "../utils/loadVideoSource.js";
+
+const AUTOPLAY_DEBOUNCE_MS = 120;
+
 export class Player {
   constructor() {
     this.currentVideo = null;
     this.wasPlayingBeforeHidden = false;
     this.muted = true;
     this.indicatorTimers = new WeakMap();
+    this.playTimers = new WeakMap();
     this.videos = new Set();
 
     this.observer = new IntersectionObserver(
@@ -33,6 +38,7 @@ export class Player {
       this.handleMuteClick,
     );
 
+    this.cancelPendingPlay(video);
     this.clearIndicatorTimer(video);
 
     if (this.currentVideo === video) {
@@ -47,6 +53,7 @@ export class Player {
         "click",
         this.handleMuteClick,
       );
+      this.cancelPendingPlay(video);
       this.clearIndicatorTimer(video);
     });
 
@@ -66,6 +73,7 @@ export class Player {
       const video = entry.target;
 
       if (!entry.isIntersecting) {
+        this.cancelPendingPlay(video);
         this.pause(video, false);
         this.hideIndicator(video);
 
@@ -77,18 +85,45 @@ export class Player {
       }
 
       if (this.currentVideo && this.currentVideo !== video) {
+        this.cancelPendingPlay(this.currentVideo);
         this.pause(this.currentVideo, false);
         this.hideIndicator(this.currentVideo);
       }
 
       this.currentVideo = video;
+      this.schedulePlay(video);
+    });
+  }
+
+  schedulePlay(video) {
+    this.cancelPendingPlay(video);
+
+    const timerId = window.setTimeout(() => {
+      this.playTimers.delete(video);
+
+      if (this.currentVideo !== video) {
+        return;
+      }
 
       this.play(video)
         .then(() => {
           this.hideIndicator(video);
         })
         .catch(() => {});
-    });
+    }, AUTOPLAY_DEBOUNCE_MS);
+
+    this.playTimers.set(video, timerId);
+  }
+
+  cancelPendingPlay(video) {
+    const timerId = this.playTimers.get(video);
+
+    if (timerId === undefined) {
+      return;
+    }
+
+    window.clearTimeout(timerId);
+    this.playTimers.delete(video);
   }
 
   handleClick = (event) => {
@@ -179,7 +214,7 @@ export class Player {
   }
 
   play(video) {
-    this.ensureLoaded(video);
+    loadVideoSource(video);
     video.muted = this.muted;
     this.updateMuteButton(video);
     return video.play();
@@ -191,21 +226,6 @@ export class Player {
     if (showIndicator) {
       this.showIndicator(video, "play");
     }
-  }
-
-  ensureLoaded(video) {
-    if (video.getAttribute("src")) {
-      return;
-    }
-
-    const source = video.dataset.src;
-
-    if (!source) {
-      return;
-    }
-
-    video.src = source;
-    video.load();
   }
 
   showIndicator(video, icon, autoHide = false) {

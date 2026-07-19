@@ -1,3 +1,5 @@
+import { loadVideoSource } from "../utils/loadVideoSource.js";
+
 export class VideoLoader {
   constructor() {
     this.observer = new IntersectionObserver(
@@ -33,18 +35,7 @@ export class VideoLoader {
   }
 
   load(video) {
-    if (video.getAttribute("src")) {
-      return;
-    }
-
-    const source = video.dataset.src;
-
-    if (!source) {
-      return;
-    }
-
-    video.src = source;
-    video.load();
+    loadVideoSource(video);
   }
 
   unload(video) {
