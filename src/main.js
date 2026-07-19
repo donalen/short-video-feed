@@ -4,6 +4,7 @@ import { createVideoCard } from "./components/VideoCard.js";
 import { Player } from "./services/Player.js";
 import { VideoLoader } from "./services/VideoLoader.js";
 import { VideoStatus } from "./services/VideoStatus.js";
+import { VideoProgress } from "./services/VideoProgress.js";
 
 const feed = document.querySelector(".video-feed");
 
@@ -14,6 +15,7 @@ if (!feed) {
 const player = new Player();
 const videoLoader = new VideoLoader();
 const videoStatus = new VideoStatus();
+const videoProgress = new VideoProgress();
 
 videos.forEach((videoData) => {
   const card = createVideoCard(videoData);
@@ -28,6 +30,7 @@ videos.forEach((videoData) => {
   player.observe(video);
   videoLoader.observe(video);
   videoStatus.observe(video);
+  videoProgress.observe(video);
 });
 
 feed.focus({ preventScroll: true });

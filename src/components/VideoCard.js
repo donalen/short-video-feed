@@ -31,6 +31,10 @@ export function createVideoCard({ id, src }) {
       aria-pressed="true"
       aria-label="Unmute"
     >🔇</button>
+
+    <div class="video-card__progress" aria-hidden="true">
+      <div class="video-card__progress-bar"></div>
+    </div>
   `;
 
   return card;
