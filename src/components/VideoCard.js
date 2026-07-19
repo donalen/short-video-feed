@@ -11,6 +11,7 @@ export function createVideoCard({ id, src }) {
       class="video-card__video"
       data-src="${src}"
       muted
+      loop
       playsinline
       preload="metadata"
       aria-label="Video ${id}"
