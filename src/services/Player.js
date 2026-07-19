@@ -217,7 +217,19 @@ export class Player {
     loadVideoSource(video);
     video.muted = this.muted;
     this.updateMuteButton(video);
-    return video.play();
+
+    return video.play().catch((error) => {
+      if (this.muted) {
+        throw error;
+      }
+
+      // Unmuted autoplay can be blocked outside a user gesture; retry muted.
+      this.muted = true;
+      video.muted = true;
+      this.updateMuteButton(video);
+
+      return video.play();
+    });
   }
 
   pause(video, showIndicator = true) {
