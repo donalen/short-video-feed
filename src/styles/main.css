@@ -62,6 +62,75 @@ body {
   background: #000;
 }
 
+.video-card__spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 40px;
+  height: 40px;
+
+  border: 3px solid rgb(255 255 255 / 25%);
+  border-top-color: #fff;
+  border-radius: 50%;
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 150ms ease;
+}
+
+.video-card.is-loading .video-card__spinner {
+  opacity: 1;
+  animation: video-card-spin 800ms linear infinite;
+}
+
+@keyframes video-card-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.video-card__error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 80%;
+  max-width: 280px;
+  padding: 20px;
+
+  text-align: center;
+  color: #fff;
+  background: rgb(0 0 0 / 60%);
+  border-radius: 12px;
+
+  transform: translate(-50%, -50%);
+}
+
+.video-card.is-error .video-card__error {
+  display: flex;
+}
+
+.video-card__error-message {
+  margin: 0;
+}
+
+.video-card__retry {
+  padding: 8px 20px;
+
+  font: inherit;
+  color: #111;
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  border-radius: 999px;
+}
+
 .video-card__playback-indicator {
   position: absolute;
   top: 50%;
